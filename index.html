@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>铭圣123网上订单系统</title>
+    <script src="https://lib.sinaapp.com/js/jquery/2.2.4/jquery-2.2.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <style>
+        body {
+            font-size: 18px;
+            line-height: 25px;
+            padding: 0 0 30px 0;
+        }
+
+        ol.goodses b {
+            position: relative;
+            font-weight: bolder;
+            color: red;
+        }
+
+        ol.goodses li {
+            border: solid black 0;
+            border-width: 0 0 1px 0;
+        }
+
+        ol.goodses a {
+            color: blue;
+            font-weight: bolder;
+        }
+
+        .select {
+            display: block;
+            width: 100%;
+        }
+
+        .select input {
+            height: 30px;
+            width: 200px;
+            font-size: 30px;
+            line-height: 30px;
+            float: left;
+        }
+
+        .select button {
+            height: 36px;
+            width: 100px;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="goodses">
+        <span class="select"><input v-model="word" @keyup.enter="select_goods" /><button v-on:click="select_goods">查询商品</button></span>
+        <ol class="goodses">
+            <li v-for="g in goodses"> {{ g[1] }}/{{ g[2] }}/{{ g[3] }}/{{ g[4] }}/{{ g[7] }}
+                <br />
+                <b>￥{{ g[8] }}/{{ g[6] }}</b> 库存{{ g[9] }}/效期{{ g[10] }}
+            </li>
+        </ol>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#goodses',
+            data: {
+                word: "",
+                goodses: [
+                    ["000033", "维生素AD软胶囊(浓)(基）", "100s", "胶囊剂", "国药控股星鲨制药(厦门)有限公司", 240, "盒",
+                        "国药准字H35020245", "5.80", 180, 20191231
+                    ]
+                ]
+            },
+            methods: {
+                select_goods: function () {
+                    $.get("https://ms123.applinzi.com/select_goods?word=" + app.word + "&page=1", function (
+                        resp) {
+                        app.goodses = resp;
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
